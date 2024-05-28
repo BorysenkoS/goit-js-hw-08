@@ -63,8 +63,8 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-const ulElem = document.querySelector('.gallery');
 
+const ulElem = document.querySelector('.gallery');
 function imageTemplate(image) {
   return `<li class="gallery-item">
   <a class="gallery-link" href="#">
@@ -72,38 +72,34 @@ function imageTemplate(image) {
       class="gallery-image"
       src="${image.preview}"
       data-source="${image.original}"
-      alt="${image.description}"
-      width ="360"
-      height = "200"
+      alt="${image.description}" width="360" height="200"
     />
   </a>
 </li>`;
 }
+
 function imagesTemplate(arr) {
   return arr.map(imageTemplate).join('');
 }
 
 const markup = imagesTemplate(images);
-
-ulElem.insertAdjacentHTML('afterbegin', markup);
+ulElem.innerHTML = markup;
 
 ulElem.addEventListener('click', e => {
   if (e.target === e.currentTarget) return;
-  const imgElem = e.target.closest('img');
-  const image = imgElem.dataset;
-  console.log(image);
+  const liElem = e.target.closest('img');
 
-  const instance = basicLightbox.create(imgElem);
-  instance.show();
+  const img = liElem.dataset.source;
+  const image = images.find(el => (el.original = img));
+
+  const markup = `
+    <img 
+      class="gallery-image"
+      src="${image.original}"
+      alt="${image.description}" 
+      width="1128"
+    />
+`;
+  const instance = basicLightbox.create(markup);
+  instance.show(image);
 });
-
-// const instance = basicLightbox.create(`
-//     <div class="modal">
-//         <p>
-//             Your first lightbox with just a few lines of code.
-//             Yes, it's really that simple.
-//         </p>
-//     </div>
-// `);
-
-// instance.show();
